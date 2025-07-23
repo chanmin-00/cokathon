@@ -1,0 +1,57 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]  # .env import
+  application:
+    name: cokaton
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}  # ?? ????? 'local'? ??
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC  # path, query, body, response ?
+    tags-sorter: alpha  # ??? ??? ??? ??
+    operations-sorter: method  # delete ? get ? patch ? post ? put ? ??
+  use-fqn: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USER}
+    password: ${LOCAL_DB_PASS}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        default_batch_fetch_size: 100
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        default_batch_fetch_size: 100
