@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.cokathon.global.dto.ErrorResponse;
 import com.example.cokathon.image.exception.ImageException;
+import com.example.cokathon.user.exception.UserException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +36,15 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ImageException.class)
 	public ResponseEntity<Object> handleImageException(ImageException e) {
 		log.error("ImageException: {}", e.getMessage(), e);
+
+		return ResponseEntity
+			.status(e.getHttpStatus())
+			.body(ErrorResponse.of(e.getHttpStatus(), e.getMessage(), e.getCode()));
+	}
+
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<Object> handleUserException(UserException e) {
+		log.error("UserException: {}", e.getMessage(), e);
 
 		return ResponseEntity
 			.status(e.getHttpStatus())
